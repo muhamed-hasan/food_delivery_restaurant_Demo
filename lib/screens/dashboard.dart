@@ -21,11 +21,11 @@ class DashboardScreen extends StatelessWidget {
           text: "Sales: \$12.99",
           color: white,
         ),
-        actions: <Widget>[],
+        actions: [],
       ),
       drawer: Drawer(
         child: ListView(
-          children: <Widget>[
+          children: [
             UserAccountsDrawerHeader(
               decoration: BoxDecoration(color: primary),
               accountName: CustomText(
@@ -50,9 +50,9 @@ class DashboardScreen extends StatelessWidget {
       backgroundColor: white,
       body: SafeArea(
           child: ListView(
-        children: <Widget>[
+        children: [
           Stack(
-            children: <Widget>[
+            children: [
 //                  Positioned.fill(
 //                      child: Align(
 //                        alignment: Alignment.center,
@@ -156,7 +156,7 @@ class DashboardScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: Row(
-                          children: <Widget>[
+                          children: [
                             Padding(
                               padding: const EdgeInsets.all(2.0),
                               child: Icon(
@@ -286,10 +286,10 @@ class DashboardScreen extends StatelessWidget {
     return Container(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
+        children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
+            children: [
               Icon(
                 Icons.camera_alt,
                 size: 40,

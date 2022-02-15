@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:food_restaurant/helpers/order_services.dart';
+import 'package:food_restaurant/helpers/restaurant.dart';
 import 'package:food_restaurant/models/order_model.dart';
+import 'package:food_restaurant/models/restaurant_model.dart';
 
 import 'package:uuid/uuid.dart';
 
@@ -19,10 +21,12 @@ class UserProvider with ChangeNotifier {
   String appName = 'foodAPP';
   String collection = 'restaurants';
   OrderServices _orderServices = OrderServices();
-
+  RestaurantServices _restaurantServices = RestaurantServices();
+  RestaurantModel? _restaurant;
 //  getter
   Status get status => _status;
   User? get user => _user;
+  RestaurantModel? get restaurant => _restaurant;
 
   // public variables
   List<OrderModel> orders = [];
@@ -99,10 +103,10 @@ class UserProvider with ChangeNotifier {
     email.text = "";
   }
 
-//  Future<void> reloadUserModel()async{
-//    _userModel = await _userServicse.getUserById(user.uid);
-//    notifyListeners();
-//  }
+  Future<void> reload() async {
+    _restaurant = await _restaurantServices.getRestaurantById(id: user!.uid);
+    notifyListeners();
+  }
 
   Future<void> _onStateChanged(User? firebaseUser) async {
     if (firebaseUser == null) {
@@ -110,7 +114,7 @@ class UserProvider with ChangeNotifier {
     } else {
       _user = firebaseUser;
       _status = Status.Authenticated;
-      // _userModel = await _userServices.getUserById(user!.uid);
+      _restaurant = await _restaurantServices.getRestaurantById(id: user!.uid);
     }
     notifyListeners();
   }
@@ -120,15 +124,15 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> removeFromCart({required Map cartItem}) async {
-    print("THE PRODUC IS: ${cartItem.toString()}");
+//   Future<bool> removeFromCart({required Map cartItem}) async {
+//     print("THE PRODUC IS: ${cartItem.toString()}");
 
-    try {
-//      _userServicse.removeFromCart(userId: _user.uid, cartItem: cartItem);
-      return true;
-    } catch (e) {
-      print("THE ERROR ${e.toString()}");
-      return false;
-    }
-  }
+//     try {
+// //      _userServicse.removeFromCart(userId: _user.uid, cartItem: cartItem);
+//       return true;
+//     } catch (e) {
+//       print("THE ERROR ${e.toString()}");
+//       return false;
+//     }
+//   }
 }
