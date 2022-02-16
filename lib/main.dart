@@ -1,5 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:food_restaurant/providers/app.dart';
+import 'package:food_restaurant/providers/category_provider.dart';
+import 'package:food_restaurant/providers/products_provider.dart';
 import 'package:food_restaurant/providers/user_provider.dart';
 import 'package:food_restaurant/screens/dashboard.dart';
 import 'package:food_restaurant/screens/login.dart';
@@ -12,11 +15,11 @@ void main() async {
 
   runApp(MultiProvider(
       providers: [
-//        ChangeNotifierProvider.value(value: AppProvider()),
+        ChangeNotifierProvider.value(value: AppProvider()),
         ChangeNotifierProvider.value(value: UserProvider.initialize()),
-//        ChangeNotifierProvider.value(value: CategoryProvider.initialize()),
+        ChangeNotifierProvider.value(value: CategoryProvider.initialize()),
 //        ChangeNotifierProvider.value(value: RestaurantProvider.initialize()),
-//        ChangeNotifierProvider.value(value: ProductProvider.initialize()),
+        ChangeNotifierProvider.value(value: ProductsProvider.initialize()),
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,

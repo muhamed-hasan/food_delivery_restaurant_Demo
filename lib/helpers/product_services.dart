@@ -20,6 +20,25 @@ class ProductService {
 
         return products;
       });
+  Future createProduct({required Map<String, dynamic> data}) async {
+    _firestore
+        .collection(appName)
+        .doc(appName)
+        .collection(collection)
+        .doc(data['id'])
+        .set({
+      "id": data['id'],
+      "name": data['name'],
+      "image": data['image'],
+      "rates": data['rates'],
+      "rating": data['rating'],
+      "price": data['price'],
+      "restaurant": data['restaurant'],
+      "restaurantId": data['restaurantId'],
+      "description": data['description'],
+      "featured": data['featured'],
+    });
+  }
 
   Future<List<ProductModel>> getProductsByRestaurant(
           {required String id}) async =>

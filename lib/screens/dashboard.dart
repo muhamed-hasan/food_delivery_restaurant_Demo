@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:food_restaurant/helpers/screen_navigation.dart';
 import 'package:food_restaurant/helpers/style.dart';
+import 'package:food_restaurant/screens/add_product.dart';
 import 'package:food_restaurant/widgets/custom_text.dart';
 import 'package:food_restaurant/widgets/small_floating_button.dart';
 
@@ -23,6 +25,11 @@ class DashboardScreen extends StatelessWidget {
         ),
         actions: [],
       ),
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            changeScreen(context, AddProductScreen());
+          }),
       drawer: Drawer(
         child: ListView(
           children: [

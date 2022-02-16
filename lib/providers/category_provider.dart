@@ -5,6 +5,8 @@ import 'package:food_restaurant/models/category_model.dart';
 class CategoryProvider with ChangeNotifier {
   CategoryServices _categoryServices = CategoryServices();
   List<CategoryModel> _categories = [];
+  List<String> categoriesNames = [];
+  String selectedCategory = '';
 
   CategoryProvider.initialize() {
     _loadCategories();
@@ -14,6 +16,15 @@ class CategoryProvider with ChangeNotifier {
 
   _loadCategories() async {
     _categories = await _categoryServices.getCategories();
+    for (CategoryModel category in categories) {
+      categoriesNames.add(category.name!);
+    }
+    selectedCategory = categoriesNames[0];
+    notifyListeners();
+  }
+
+  changeSelectedCategory(String newCategory) {
+    selectedCategory = newCategory;
     notifyListeners();
   }
 }

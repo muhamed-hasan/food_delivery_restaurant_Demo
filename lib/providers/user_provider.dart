@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:food_restaurant/helpers/order_services.dart';
+import 'package:food_restaurant/helpers/product_services.dart';
 import 'package:food_restaurant/helpers/restaurant.dart';
 import 'package:food_restaurant/models/order_model.dart';
+import 'package:food_restaurant/models/product_model.dart';
 import 'package:food_restaurant/models/restaurant_model.dart';
 
 import 'package:uuid/uuid.dart';
@@ -23,13 +25,18 @@ class UserProvider with ChangeNotifier {
   OrderServices _orderServices = OrderServices();
   RestaurantServices _restaurantServices = RestaurantServices();
   RestaurantModel? _restaurant;
+
+  ProductService _productServices = ProductService();
+  double _totalSales = 0;
+  double _avgPrice = 0;
+  double _restaurantRating = 0;
 //  getter
   Status get status => _status;
   User? get user => _user;
   RestaurantModel? get restaurant => _restaurant;
-
   // public variables
   List<OrderModel> orders = [];
+  List<ProductModel> products = <ProductModel>[];
 
   final formkey = GlobalKey<FormState>();
 
@@ -124,15 +131,8 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-//   Future<bool> removeFromCart({required Map cartItem}) async {
-//     print("THE PRODUC IS: ${cartItem.toString()}");
-
-//     try {
-// //      _userServicse.removeFromCart(userId: _user.uid, cartItem: cartItem);
-//       return true;
-//     } catch (e) {
-//       print("THE ERROR ${e.toString()}");
-//       return false;
-//     }
-//   }
+  Future loadProductsByRestaurant({required String restaurantId}) async {
+    products = await _productServices.getProductsByRestaurant(id: restaurantId);
+    notifyListeners();
+  }
 }
