@@ -34,6 +34,11 @@ class UserProvider with ChangeNotifier {
   Status get status => _status;
   User? get user => _user;
   RestaurantModel? get restaurant => _restaurant;
+
+  double get totalSales => _totalSales;
+  double get avgPrice => _avgPrice;
+  double get restaurantRating => _restaurantRating;
+
   // public variables
   List<OrderModel> orders = [];
   List<ProductModel> products = <ProductModel>[];
@@ -121,7 +126,34 @@ class UserProvider with ChangeNotifier {
     } else {
       _user = firebaseUser;
       _status = Status.Authenticated;
+      await loadProductsByRestaurant(restaurantId: user!.uid);
+      await getOrders();
+      // await getTotalSales();
+      await getAvgPrice();
       _restaurant = await _restaurantServices.getRestaurantById(id: user!.uid);
+    }
+    notifyListeners();
+  }
+  // getTotalSales() async {
+  //   for (OrderModel order in orders) {
+  //     for (CartItemModel item in order.cart) {
+  //       if (item.restaurantId == user.uid) {
+  //         _totalSales = _totalSales + item.totalRestaurantSale;
+  //         cartItems.add(item);
+  //       }
+  //     }
+  //   }
+  //   _totalSales = _totalSales / 100;
+  //   notifyListeners();
+  // }
+
+  getAvgPrice() async {
+    if (products.length != 0) {
+      double amountSum = 0;
+      for (ProductModel product in products) {
+        amountSum += product.price!;
+      }
+      _avgPrice = (amountSum / products.length);
     }
     notifyListeners();
   }
