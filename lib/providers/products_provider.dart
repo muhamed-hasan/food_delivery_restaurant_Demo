@@ -81,7 +81,7 @@ class ProductsProvider with ChangeNotifier {
           await _uploadImageFile(imageFile: productImage!, imageFileName: id);
       Map<String, dynamic> data = {
         "id": id,
-        "name": name!.text[0].toUpperCase() + name!.text.trim(),
+        "name": name!.text[0].toUpperCase() + name!.text.substring(1).trim(),
         "image": imageUrl,
         "rates": 0,
         "rating": 0.0,
@@ -89,7 +89,8 @@ class ProductsProvider with ChangeNotifier {
         "restaurant": restaurant,
         "restaurantId": restaurantId,
         "description": description!.text.trim(),
-        "featured": featured
+        "featured": featured,
+        "category": category
       };
       _productServices.createProduct(data: data);
       clear();

@@ -37,6 +37,7 @@ class ProductService {
       "restaurantId": data['restaurantId'],
       "description": data['description'],
       "featured": data['featured'],
+      "category": data['category'],
     });
   }
 
@@ -50,7 +51,8 @@ class ProductService {
           .get()
           .then((result) {
         List<ProductModel> products = [];
-        for (DocumentSnapshot product in result.docs) {
+        for (QueryDocumentSnapshot<Map<String, dynamic>> product
+            in result.docs) {
           products.add(ProductModel.fromSnapshot(product));
         }
         return products;

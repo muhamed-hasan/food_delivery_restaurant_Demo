@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:food_restaurant/models/cart_item_model.dart';
 
 class OrderModel {
   static const ID = "id";
@@ -18,7 +19,7 @@ class OrderModel {
   int? _createdAt;
   double? _total;
   // public variable
-  List? cart;
+  List<CartItemModel>? cart;
 //  getters
   String? get id => _id;
   String? get restaurantId => _restaurantId;
@@ -37,6 +38,13 @@ class OrderModel {
     _userId = data[USER_ID];
     _createdAt = data[CREATED_AT];
     _restaurantId = data[RESTAURANT_ID];
-    cart = data[CART];
+    cart = _convertCartItems(data[CART], _createdAt!);
+  }
+  List<CartItemModel> _convertCartItems(List cart, int createdAt) {
+    List<CartItemModel> convertedCart = [];
+    for (Map<String, dynamic> cartItem in cart) {
+      convertedCart.add(CartItemModel.fromMap(cartItem, createdAt));
+    }
+    return convertedCart;
   }
 }

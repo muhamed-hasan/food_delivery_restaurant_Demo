@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:food_restaurant/helpers/order_services.dart';
 import 'package:food_restaurant/helpers/product_services.dart';
 import 'package:food_restaurant/helpers/restaurant.dart';
+import 'package:food_restaurant/models/cart_item_model.dart';
 import 'package:food_restaurant/models/order_model.dart';
 import 'package:food_restaurant/models/product_model.dart';
 import 'package:food_restaurant/models/restaurant_model.dart';
@@ -30,11 +31,12 @@ class UserProvider with ChangeNotifier {
   double _totalSales = 0;
   double _avgPrice = 0;
   double _restaurantRating = 0;
+
 //  getter
   Status get status => _status;
   User? get user => _user;
   RestaurantModel? get restaurant => _restaurant;
-
+  List<CartItemModel> cartItems = [];
   double get totalSales => _totalSales;
   double get avgPrice => _avgPrice;
   double get restaurantRating => _restaurantRating;
@@ -86,7 +88,8 @@ class UserProvider with ChangeNotifier {
           'email': email.text,
           'id': result.user!.uid,
           "avgPrice": 0.0,
-          "image": "",
+          "image":
+              "https://img.freepik.com/free-photo/cozy-restaurant-with-people-waiter_175935-230.jpg?w=300",
           "popular": false,
           "rates": 0,
           "rating": 0.0,
@@ -117,6 +120,10 @@ class UserProvider with ChangeNotifier {
 
   Future<void> reload() async {
     _restaurant = await _restaurantServices.getRestaurantById(id: user!.uid);
+    await loadProductsByRestaurant(restaurantId: user!.uid);
+    await getOrders();
+    await getTotalSales();
+    await getAvgPrice();
     notifyListeners();
   }
 
@@ -128,27 +135,28 @@ class UserProvider with ChangeNotifier {
       _status = Status.Authenticated;
       await loadProductsByRestaurant(restaurantId: user!.uid);
       await getOrders();
-      // await getTotalSales();
+      await getTotalSales();
       await getAvgPrice();
       _restaurant = await _restaurantServices.getRestaurantById(id: user!.uid);
     }
     notifyListeners();
   }
-  // getTotalSales() async {
-  //   for (OrderModel order in orders) {
-  //     for (CartItemModel item in order.cart) {
-  //       if (item.restaurantId == user.uid) {
-  //         _totalSales = _totalSales + item.totalRestaurantSale;
-  //         cartItems.add(item);
-  //       }
-  //     }
-  //   }
-  //   _totalSales = _totalSales / 100;
-  //   notifyListeners();
-  // }
+
+  getTotalSales() async {
+    for (OrderModel order in orders) {
+      for (CartItemModel item in order.cart!) {
+        if (item.restaurantId == user!.uid) {
+          _totalSales = _totalSales + item.totalRestaurantSale!;
+          cartItems.add(item);
+        }
+      }
+    }
+    _totalSales = _totalSales;
+    notifyListeners();
+  }
 
   getAvgPrice() async {
-    if (products.length != 0) {
+    if (products.isNotEmpty) {
       double amountSum = 0;
       for (ProductModel product in products) {
         amountSum += product.price!;
@@ -159,7 +167,8 @@ class UserProvider with ChangeNotifier {
   }
 
   getOrders() async {
-    orders = await _orderServices.getUserOrders(userId: _user!.uid);
+    orders = await _orderServices.restaurantOrders(restaurantId: _user!.uid);
+
     notifyListeners();
   }
 

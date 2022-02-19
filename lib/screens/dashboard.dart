@@ -5,7 +5,10 @@ import 'package:food_restaurant/providers/products_provider.dart';
 import 'package:food_restaurant/providers/user_provider.dart';
 import 'package:food_restaurant/screens/add_product.dart';
 import 'package:food_restaurant/screens/login.dart';
+import 'package:food_restaurant/screens/orders.dart';
+import 'package:food_restaurant/screens/products.dart';
 import 'package:food_restaurant/widgets/custom_text.dart';
+import 'package:food_restaurant/widgets/loading.dart';
 import 'package:food_restaurant/widgets/product.dart';
 import 'package:food_restaurant/widgets/small_floating_button.dart';
 
@@ -30,207 +33,210 @@ class DashboardScreen extends StatelessWidget {
         elevation: 0.5,
         backgroundColor: primary,
         title: CustomText(
-          text: "Sales: \$${userProvider.totalSales}",
+          text: "Sales: \$${userProvider.totalSales.toStringAsFixed(2)}",
           color: white,
         ),
       ),
       drawer: MyDrawer(userProvider: userProvider),
       backgroundColor: white,
-      body: SafeArea(
-          child: ListView(
-        children: [
-          Stack(
-            children: [
-              ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(2),
-                    bottomRight: Radius.circular(2),
-                  ),
-                  child: imageWidget(hasImage: hasImage)),
-
-              // fading black
-              Container(
-                height: 160,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(2),
-                      bottomRight: Radius.circular(2),
-                    ),
-                    gradient: LinearGradient(
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                      colors: [
-                        Colors.black.withOpacity(0.6),
-                        Colors.black.withOpacity(0.6),
-                        Colors.black.withOpacity(0.6),
-                        Colors.black.withOpacity(0.4),
-                        Colors.black.withOpacity(0.1),
-                        Colors.black.withOpacity(0.05),
-                        Colors.black.withOpacity(0.025),
-                      ],
-                    )),
-              ),
-
-              //restaurant name
-              Positioned.fill(
-                  bottom: 30,
-                  left: 10,
-                  child: Align(
-                      alignment: Alignment.bottomLeft,
-                      child: CustomText(
-                        text: userProvider.restaurant?.name ?? "",
-                        color: white,
-                        size: 24,
-                        weight: FontWeight.normal,
-                      ))),
-
-              // average price
-              Positioned.fill(
-                  bottom: 10,
-                  left: 10,
-                  child: Align(
-                      alignment: Alignment.bottomLeft,
-                      child: CustomText(
-                        text:
-                            "Average Price: \$ ${userProvider.avgPrice.toStringAsFixed(2)}",
-                        color: white,
-                        size: 16,
-                        weight: FontWeight.w300,
-                      ))),
-
-              Positioned.fill(
-                  bottom: 2,
-                  child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        width: 50,
-                        decoration: BoxDecoration(
-                          color: white,
-                          borderRadius: BorderRadius.circular(5),
+      body: userProvider.restaurant == null
+          ? Loading()
+          : SafeArea(
+              child: ListView(
+              children: [
+                Stack(
+                  children: [
+                    ClipRRect(
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(2),
+                          bottomRight: Radius.circular(2),
                         ),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(2.0),
-                              child: Icon(
-                                Icons.star,
-                                color: Colors.yellow[900],
-                                size: 20,
+                        child: imageWidget(
+                            hasImage: true,
+                            url: userProvider.restaurant!.image)),
+
+                    // fading black
+                    Container(
+                      height: 160,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(2),
+                            bottomRight: Radius.circular(2),
+                          ),
+                          gradient: LinearGradient(
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                            colors: [
+                              Colors.black.withOpacity(0.6),
+                              Colors.black.withOpacity(0.6),
+                              Colors.black.withOpacity(0.6),
+                              Colors.black.withOpacity(0.4),
+                              Colors.black.withOpacity(0.1),
+                              Colors.black.withOpacity(0.05),
+                              Colors.black.withOpacity(0.025),
+                            ],
+                          )),
+                    ),
+
+                    //restaurant name
+                    Positioned.fill(
+                        bottom: 30,
+                        left: 10,
+                        child: Align(
+                            alignment: Alignment.bottomLeft,
+                            child: CustomText(
+                              text: userProvider.restaurant?.name ?? "",
+                              color: white,
+                              size: 24,
+                              weight: FontWeight.normal,
+                            ))),
+
+                    // average price
+                    Positioned.fill(
+                        bottom: 10,
+                        left: 10,
+                        child: Align(
+                            alignment: Alignment.bottomLeft,
+                            child: CustomText(
+                              text:
+                                  "Average Price: \$ ${userProvider.avgPrice.toStringAsFixed(2)}",
+                              color: white,
+                              size: 16,
+                              weight: FontWeight.w300,
+                            ))),
+
+                    Positioned.fill(
+                        bottom: 2,
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              width: 50,
+                              decoration: BoxDecoration(
+                                color: white,
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Icon(
+                                      Icons.star,
+                                      color: Colors.yellow[900],
+                                      size: 20,
+                                    ),
+                                  ),
+                                  Text("${userProvider.restaurantRating}"),
+                                ],
                               ),
                             ),
-                            Text("${userProvider.restaurantRating}"),
-                          ],
-                        ),
-                      ),
-                    ),
-                  )),
+                          ),
+                        )),
 
-              //like button
-              Positioned.fill(
-                  top: 5,
-                  child: Align(
-                    alignment: Alignment.topRight,
-                    child: Padding(
-                      padding: const EdgeInsets.all(4),
-                      child: GestureDetector(
-                        onTap: () {},
-                        child: SmallButton(Icons.favorite),
-                      ),
-                    ),
-                  )),
-            ],
-          ),
-          SizedBox(
-            height: 10,
-          ),
+                    //like button
+                    Positioned.fill(
+                        top: 5,
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: Padding(
+                            padding: const EdgeInsets.all(4),
+                            child: GestureDetector(
+                              onTap: () {},
+                              child: SmallButton(Icons.favorite),
+                            ),
+                          ),
+                        )),
+                  ],
+                ),
+                SizedBox(height: 10),
 
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Padding(
-              padding: const EdgeInsets.all(4),
-              child: Container(
-                decoration: BoxDecoration(
-                    color: white,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.grey[300]!,
-                          offset: Offset(-2, -1),
-                          blurRadius: 5),
-                    ]),
-                child: ListTile(
-                    onTap: () {
-                      // changeScreen(context, OrdersScreen());
-                    },
-                    leading: Padding(
-                      padding: const EdgeInsets.all(4),
-                      child: Image.asset("images/delivery.png"),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey[300]!,
+                                offset: Offset(-2, -1),
+                                blurRadius: 5),
+                          ]),
+                      child: ListTile(
+                          onTap: () {
+                            changeScreen(context, OrdersScreen());
+                          },
+                          leading: Padding(
+                            padding: const EdgeInsets.all(4),
+                            child: Image.asset("images/delivery.png"),
+                          ),
+                          title: CustomText(
+                            text: "Orders",
+                            size: 24,
+                          ),
+                          trailing: CustomText(
+                            text: userProvider.orders.length.toString(),
+                            size: 24,
+                            weight: FontWeight.bold,
+                          )),
                     ),
-                    title: CustomText(
-                      text: "Orders",
-                      size: 24,
-                    ),
-                    trailing: CustomText(
-                      text: userProvider.orders.length.toString(),
-                      size: 24,
-                      weight: FontWeight.bold,
-                    )),
-              ),
-            ),
-          ),
+                  ),
+                ),
 
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Padding(
-              padding: const EdgeInsets.all(4),
-              child: Container(
-                decoration: BoxDecoration(
-                    color: white,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.grey[300]!,
-                          offset: Offset(-2, -1),
-                          blurRadius: 5),
-                    ]),
-                child: ListTile(
-                    onTap: () {
-                      // changeScreen(context, ProductsScreen());
-                    },
-                    leading: Padding(
-                      padding: const EdgeInsets.all(4),
-                      child: Image.asset("images/fd.png"),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey[300]!,
+                                offset: Offset(-2, -1),
+                                blurRadius: 5),
+                          ]),
+                      child: ListTile(
+                          onTap: () {
+                            changeScreen(context, ProductsScreen());
+                          },
+                          leading: Padding(
+                            padding: const EdgeInsets.all(4),
+                            child: Image.asset("images/fd.png"),
+                          ),
+                          title: CustomText(
+                            text: "Products",
+                            size: 24,
+                          ),
+                          trailing: CustomText(
+                            text: userProvider.products.length.toString(),
+                            size: 24,
+                            weight: FontWeight.bold,
+                          )),
                     ),
-                    title: CustomText(
-                      text: "Products",
-                      size: 24,
-                    ),
-                    trailing: CustomText(
-                      text: userProvider.products.length.toString(),
-                      size: 24,
-                      weight: FontWeight.bold,
-                    )),
-              ),
-            ),
-          ),
+                  ),
+                ),
 
-          // products
-          Column(
-            children: userProvider.products
-                .map((item) => GestureDetector(
-                      onTap: () {
+                // products
+                Column(
+                  children: userProvider.products
+                      .map((item) => GestureDetector(
+                            onTap: () {
+                              print(userProvider.products.toString());
 //                    changeScreen(context, Details(product: item,));
-                      },
-                      child: ProductWidget(
-                        product: item,
-                      ),
-                    ))
-                .toList(),
-          )
-        ],
-      )),
+                            },
+                            child: ProductWidget(
+                              product: item,
+                            ),
+                          ))
+                      .toList(),
+                )
+              ],
+            )),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           changeScreen(context, AddProductScreen());
@@ -311,14 +317,14 @@ class MyDrawer extends StatelessWidget {
           ),
           ListTile(
             onTap: () {
-              // changeScreen(context, OrdersScreen());
+              changeScreen(context, OrdersScreen());
             },
             leading: Icon(Icons.bookmark_border),
             title: CustomText(text: "Orders"),
           ),
           ListTile(
             onTap: () {
-              // changeScreen(context, ProductsScreen());
+              changeScreen(context, ProductsScreen());
             },
             leading: Icon(Icons.fastfood),
             title: CustomText(text: "Products"),
