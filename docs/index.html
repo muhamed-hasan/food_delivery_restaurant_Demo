@@ -6,7 +6,7 @@
     If you are serving your web app in a path other than the root, change the
     href value below to reflect the base path you are serving from.
 
-    The path provided below has to start and end with a slash "food_delivery_restaurant_Demo" in order for
+    The path provided below has to start and end with a slash "/food_delivery_restaurant_Demo/" in order for
     it to work correctly.
 
     For more details:
@@ -39,7 +39,7 @@
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->
   <script>
-    var serviceWorkerVersion = '2023405283';
+    var serviceWorkerVersion = '332457119';
     var scriptLoaded = false;
     function loadMainDartJs() {
       if (scriptLoaded) {
@@ -102,6 +102,40 @@
       loadMainDartJs();
     }
   </script>
-</body>
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-storage.js"></script> -->
+  <!-- <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-messaging.js"></script>
+   <!-- Firebase Configuration -->
+  <script>
+    const firebaseConfig = {
 
+      apiKey: "AIzaSyD8_KIQRd2V2qaHdSsGGWKdWMvpfXt1WW8",
+
+      authDomain: "mmmhwebapps.firebaseapp.com",
+
+      databaseURL: "https://mmmhwebapps-default-rtdb.asia-southeast1.firebasedatabase.app",
+
+      projectId: "mmmhwebapps",
+
+      storageBucket: "mmmhwebapps.appspot.com",
+
+      messagingSenderId: "1088901932130",
+
+      appId: "1:1088901932130:web:1499f9a4879176dee35d3b"
+
+    };
+
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+  </script>
+  <!-- <script>
+     if ("serviceWorker" in navigator) {
+       window.addEventListener("load", function () {
+         navigator.serviceWorker.register("/firebase-messaging-sw.js");
+       });
+     }
+</body>
 </html>
